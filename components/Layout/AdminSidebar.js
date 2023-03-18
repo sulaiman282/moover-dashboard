@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AdminMenuItems from "./AdminMenuItems";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import Image from "next/image";
 import Logo from "../../public/logo.png";
 import Link from "next/link";
+import useWindowSize from "../../hooks/useWindowSize";
+
 
 export default function ProfileSidebar({ children }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleDrawer = () => {
-    setIsOpen((prevState) => !prevState);
+
+    if (windowSize?.width < 1024) {
+      setIsOpen((prevState) => !prevState);
+    } 
+    
   };
+const windowSize=useWindowSize();
+  useEffect(() => {
+    if (windowSize?.width > 1024) {
+      setIsOpen(false);
+    } 
+  }, [windowSize]);
   return (
     <>
       <div className="">
@@ -19,7 +31,7 @@ export default function ProfileSidebar({ children }) {
             onClick={toggleDrawer}
             className="  hover:text-red-700 duration-300 text-xl"
           >
-            <i class="fa-solid fa-bars"></i>
+            <i className="fa-solid fa-bars"></i>
           </button>
 
           <Link href="/admin/vendors">
@@ -46,10 +58,10 @@ export default function ProfileSidebar({ children }) {
               </Link>
             </div>
             <div className="p-5 h-full">
-              <AdminMenuItems />
+              <AdminMenuItems  toggleDrawer={toggleDrawer}/>
             </div>
           </div>
-          <div className="  w-full lg:bg-[#F7F8F9] lg:p-16 md:p-10 p-5 lg:min-h-screen ">{children}</div>
+          <div className="  w-full lg:bg-[#F7F8F9] lg:p-16 md:p-10 p-5 lg:min-h-screen  ">{children}</div>
         </div>
       </div>
       <Drawer
@@ -71,7 +83,7 @@ export default function ProfileSidebar({ children }) {
               </Link>
             </div>
             <div className="p-5 h-5/6">
-              <AdminMenuItems />
+              <AdminMenuItems  toggleDrawer={toggleDrawer}/>
             </div>
           </div>
       </Drawer>

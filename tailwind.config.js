@@ -195,8 +195,7 @@ module.exports = {
         primary2: "#371B5C",
 
         bg1: "#FFFFF2",
-        bg2:"#F9F9F9",
-        card:"#FFF7DE",
+        bg2: "#F7F8F9",
        
        
       },
