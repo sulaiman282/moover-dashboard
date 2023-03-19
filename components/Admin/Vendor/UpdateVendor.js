@@ -23,6 +23,9 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
       setCountryList(response.data);
     }
     CountryData();
+    StateData(modalData?.address?.country?.id.toString());
+    CityData(modalData?.address?.state?.id.toString());
+    AreaData(modalData?.address?.city?.id.toString());
   }, []);
 
   //get state by id
@@ -65,11 +68,14 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
     formData.append("last_name", values.last_name);
     formData.append("email", values.email);
     formData.append("phone_number", values.number);
-    // formData.append("country_id", values.country_id);
-    // formData.append("state_id", values.state_id);
-    // formData.append("city_id", values.city_id);
-    // formData.append("area_id", values.area_id);
-    // formData.append("street", values.street);
+    formData.append("country_id", values.country_id);
+    formData.append("state_id", values.state_id);
+    formData.append("city_id", values.city_id);
+    formData.append("area_id", values.area_id);
+    formData.append("street", values.street);
+    formData.append("trade_license_docs", values.trade_license_docs);
+    formData.append("contract_file", values.contract_file);
+    formData.append("vender_agreement", values.vender_agreement);
 
     const loading = toast.loading("Please wait a moment.");
     try {
@@ -106,19 +112,22 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
       </div>
 
       <Formik
-        enableReinitialize
+        
         initialValues={{
           type: modalData?.address?.type||"",
           first_name:firstName || "",
           last_name: lastName || "",
           email: modalData?.user?.email || "",
           number:modalData?.user?.phone_number|| "",
-          country_id:  "",
-          state_id: "",
-          city_id: "",
-          area_id: "",
+          country_id: modalData?.address?.country?.id.toString() || "",
+          state_id:modalData?.address?.state?.id.toString() || "",
+          city_id:modalData?.address?.city?.id.toString() || "",
+          area_id:modalData?.address?.area?.id.toString() || "",
           street: modalData?.address?.street || "",
           trade_license_number: modalData?.trade_license_number,
+          trade_license_docs:[],
+          contract_file:[],
+          vender_agreement:[],
         }}
         validate={(values) => {
           const errors = {};
@@ -251,15 +260,19 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
 
             <div className="flex lg:justify-between lg:flex-row flex-col gap-4">
               <div className="flex flex-col w-full ">
-                <small className="mb-1 ml-1 flex gap-2 flex-wrap justify-between"><span>Country</span><span className="text-xs text-gray-700">{modalData?.address?.country?.name}</span></small>
+                <small className="mb-1 ml-1 ">Country</small>
 
                 <select
                   onChange={(e) => {
                     handleChange(e);
-                    StateData(e.target.value);
+                    setStateList(null) ;
+                    setCityList(null) ; 
+                    setAreaList(null) ; 
+                   
                     values.state_id = "";
                     values.city_id = "";
                     values.area_id = "";
+                    StateData(e.target.value);
                   }}
                   onBlur={handleBlur}
                   value={values.country_id}
@@ -281,15 +294,18 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
               </div>
               <div className="flex flex-col w-full ">
               
-                <small className="mb-1 ml-1 flex gap-2 flex-wrap justify-between"><span>State</span><span className="text-xs text-gray-700">{modalData?.address?.state?.name}</span></small>
+                <small className="mb-1 ml-1 ">State</small>
                 <select
                   name="state_id"
                   value={values.state_id}
                   onChange={(e) => {
                     handleChange(e);
-                    CityData(e.target.value);
+                    setCityList(null) ; 
+                    setAreaList(null) ; 
                     values.city_id = "";
                     values.area_id = "";
+                
+                    CityData(e.target.value);
                   }}
                   onBlur={handleBlur}
                   className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
@@ -308,14 +324,16 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
               </div>
               <div className="flex flex-col w-full ">
                
-                <small className="mb-1 ml-1 flex gap-2 flex-wrap justify-between"><span>City</span><span className="text-xs text-gray-700">{modalData?.address?.city?.name}</span></small>
+                <small className="mb-1 ml-1 ">City</small>
                 <select
                   name="city_id"
                   value={values.city_id}
                   onChange={(e) => {
                     handleChange(e);
-                    AreaData(e.target.value);
+                 
                     values.area_id = "";
+                    setAreaList(null) ; 
+                    AreaData(e.target.value);
                   }}
                   onBlur={handleBlur}
                   className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
@@ -334,7 +352,7 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
               </div>
               <div className="flex flex-col w-full ">
           
-                <small className="mb-1 ml-1 flex gap-2 flex-wrap justify-between"><span>Area</span><span className="text-xs text-gray-700">{modalData?.address?.area?.name}</span></small>
+                <small className="mb-1 ml-1 ">Area</small>
                 <select
                   name="area_id"
                   onChange={(e) => {
@@ -414,7 +432,68 @@ export default function CreateDriver({ setTrigger, modalData,setModalOpen2 }) {
                 </small>
               </div>
             </div>
+            <div className="flex lg:flex-row flex-col gap-4">
+<div className="relative w-full ">
+        <small className="mb-1 ml-1">trade_license_docs</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="trade_license_docs"
+          onChange={(e) => {
+            values.trade_license_docs = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="Trade license docs"
+        />
+        <small className="p-2 text-red-700">
+          {errors.trade_license_docs &&
+            touched.trade_license_docs &&
+            errors.trade_license_docs}
+        </small>
+      </div>
 
+      <div className="relative w-full ">
+        <small className="mb-1 ml-1">Contract File</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="contract_file"
+          onChange={(e) => {
+            values.contract_file = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="contract_file"
+        />
+        <small className="p-2 text-red-700">
+          {errors.contract_file && touched.contract_file && errors.contract_file}
+        </small>
+      </div>
+
+      <div className="relative w-full ">
+        <small className="mb-1 ml-1">vender_agreement</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="vender_agreement"
+          onChange={(e) => {
+            values.vender_agreement = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="vender_agreement"
+        />
+        <small className="p-2 text-red-700">
+          {errors.vender_agreement &&
+            touched.vender_agreement &&
+            errors.vender_agreement}
+        </small>
+      </div>
+    </div>
             <button
               type="submit"
               disabled={isLoading}

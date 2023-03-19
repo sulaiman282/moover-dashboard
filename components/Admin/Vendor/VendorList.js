@@ -138,7 +138,30 @@ export default function VendorList({ vendorListdata, setTrigger }) {
           <span className="font-bold">Trade Licence Number:</span>&nbsp;
           {modalData?.trade_license_number}
         </p>
-   
+        {modalData?.contract_file && (
+              <p>
+                <span className="font-bold">Contract File:</span>&nbsp;{" "}
+                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.contract_file}>
+                  View Now
+                </a>
+              </p>
+            )}
+        {modalData?.trade_license_docs && (
+              <p>
+                <span className="font-bold">Trading Licence:</span>&nbsp;{" "}
+                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.trade_license_docs}>
+                  View Now
+                </a>
+              </p>
+            )}
+        {modalData?.vender_agreement && (
+              <p>
+                <span className="font-bold">Vender Agreement:</span>&nbsp;{" "}
+                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.vender_agreement}>
+                  View Now
+                </a>
+              </p>
+            )}
 
         <p>
           <span className="font-bold">Street:</span>&nbsp;

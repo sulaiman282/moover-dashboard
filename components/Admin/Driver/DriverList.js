@@ -7,7 +7,7 @@ export default function VendorList({ driverListdata, setTrigger }) {
   const [modalData, setModalData] = useState();
 
   const [modalOpen2, setModalOpen2] = useState(false);
- console.log("modal data",modalData)
+  console.log("modal data", modalData);
 
   function openModal() {
     setModalOpen(true);
@@ -124,6 +124,10 @@ export default function VendorList({ driverListdata, setTrigger }) {
             closeModal();
           }}
         ></i>
+        <div className="flex justify-center">
+        <img src={process.env.NEXT_PUBLIC_API_URL+modalData?.profile_pic} className="w-40 h-40 p-5 lg:w-64 lg:h-64 object-contain"/>
+       
+        </div>
         <div className="flex lg:flex-row flex-col gap-16">
           <div className=" text-sm md:text-base tracking-wide">
             <h1 className="border-b text-lg lg:text-xl font-bold w-fit border-black mb-3 ">
@@ -145,18 +149,23 @@ export default function VendorList({ driverListdata, setTrigger }) {
               <span className="font-bold">Email:</span>&nbsp;
               {modalData?.user?.email}
             </p>
-            <p>
-              <span className="font-bold">Driving Licence:</span>&nbsp;{" "}
-              <a target="_blank" href={modalData?.driving_license}>
-                View Now
-              </a>
-            </p>
-            <p>
-              <span className="font-bold">Identification:</span>&nbsp;{" "}
-              <a target="_blank" href={modalData?.identification}>
-                View Now
-              </a>
-            </p>
+            {modalData?.driving_license && (
+              <p>
+                <span className="font-bold">Driving Licence:</span>&nbsp;{" "}
+                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.driving_license}>
+                  View Now
+                </a>
+              </p>
+            )}
+
+            {modalData?.identification && (
+              <p>
+                <span className="font-bold">Identification:</span>&nbsp;{" "}
+                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.identification}>
+                  View Now
+                </a>
+              </p>
+            )}
 
             <p>
               <span className="font-bold">Street:</span>&nbsp;
@@ -211,7 +220,11 @@ export default function VendorList({ driverListdata, setTrigger }) {
             closeModal2();
           }}
         ></i>
-        <UpdateModal modalData={modalData}/>
+        <UpdateModal
+          modalData={modalData}
+          setTrigger={setTrigger}
+          setModalOpen2={setModalOpen2}
+        />
       </Modal>
     </>
   );

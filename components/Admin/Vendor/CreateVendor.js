@@ -71,6 +71,9 @@ export default function CreateDriver({ setTrigger }) {
     formData.append("city_id", values.city_id);
     formData.append("area_id", values.area_id);
     formData.append("street", values.street);
+    formData.append("trade_license_docs", values.trade_license_docs);
+    formData.append("contract_file", values.contract_file);
+    formData.append("vender_agreement", values.vender_agreement);
 
 
     const loading = toast.loading("Please wait a moment.");
@@ -123,7 +126,10 @@ initialValues={{
   city_id: "",
   area_id: "",
   street: "",
-  trade_license_number:""
+  trade_license_number:"",
+  trade_license_docs:[],
+  contract_file:[],
+  vender_agreement:[],
 
 }}
 validate={(values) => {
@@ -420,6 +426,69 @@ onSubmit={(values, { resetForm }) => {
   </div>
 </div>
  
+
+<div className="flex lg:flex-row flex-col gap-4">
+<div className="relative w-full ">
+        <small className="mb-1 ml-1">trade_license_docs</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="trade_license_docs"
+          onChange={(e) => {
+            values.trade_license_docs = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="Trade license docs"
+        />
+        <small className="p-2 text-red-700">
+          {errors.trade_license_docs &&
+            touched.trade_license_docs &&
+            errors.trade_license_docs}
+        </small>
+      </div>
+
+      <div className="relative w-full ">
+        <small className="mb-1 ml-1">Contract File</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="contract_file"
+          onChange={(e) => {
+            values.contract_file = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="contract_file"
+        />
+        <small className="p-2 text-red-700">
+          {errors.contract_file && touched.contract_file && errors.contract_file}
+        </small>
+      </div>
+
+      <div className="relative w-full ">
+        <small className="mb-1 ml-1">vender_agreement</small>
+        <input
+          type="file"
+          accept=".pdf"
+          name="vender_agreement"
+          onChange={(e) => {
+            values.vender_agreement = e.target.files[0];
+          }}
+          autoComplete="off"
+          onBlur={handleBlur}
+          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+          placeholder="vender_agreement"
+        />
+        <small className="p-2 text-red-700">
+          {errors.vender_agreement &&
+            touched.vender_agreement &&
+            errors.vender_agreement}
+        </small>
+      </div>
+    </div>
 
     <button
       type="submit"
