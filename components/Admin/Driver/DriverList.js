@@ -34,7 +34,7 @@ export default function VendorList({ driverListdata, setTrigger }) {
         Driver List
       </h1>
       <div className="lg:text-base text-sm  w-full  overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100 ">
-        <table class=" table-auto  text-center min-w-[600px] w-full ">
+        <table className=" table-auto  text-center min-w-[600px] w-full ">
           <thead className="border   bg-gray-700 text-white">
             <tr>
               <th className="border py-2  w-3/12">Driver Name</th>
@@ -52,19 +52,19 @@ export default function VendorList({ driverListdata, setTrigger }) {
                 <td className="border break-all">{item?.vender?.name}</td>
                 <td className="border break-all">{item?.user?.phone_number}</td>
                 <td className="border break-all ">
-                  <label class="relative inline-flex items-center cursor-pointer mt-2">
-                    <input type="checkbox" value="" class="sr-only peer" onChange={()=>UpdateStatus(item?.id)} defaultChecked={item?.driver_status == true} />
-                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-primary dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-gray-900"></div>
+                  <label className="relative inline-flex items-center cursor-pointer mt-2">
+                    <input type="checkbox" value="" className="sr-only peer" onChange={()=>UpdateStatus(item?.id)} defaultChecked={item?.driver_status == true} />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-primary dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-gray-900"></div>
                   </label>
                 </td>
              
                 <td className="border  ">
                   {" "}
                   <div className="flex flex-row  justify-between gap-2 px-2">
-                    <i class="fa-solid fa-eye cursor-pointer hover:text-red-700"></i>{" "}
-                    <i class="fa-solid fa-pen-to-square cursor-pointer hover:text-red-700"></i>{" "}
+                    <i className="fa-solid fa-eye cursor-pointer hover:text-red-700"></i>{" "}
+                    <i className="fa-solid fa-pen-to-square cursor-pointer hover:text-red-700"></i>{" "}
                     <i
-                      class="fa-solid fa-trash cursor-pointer hover:text-red-700"
+                      className="fa-solid fa-trash cursor-pointer hover:text-red-700"
                       onClick={(e) => DeleteVendor(item?.id)}
                     ></i>
                   </div>{" "}

@@ -4,10 +4,8 @@ import Head from "next/head";
 import DriverList from "../../components/Admin/Driver/DriverList";
 import axios from "../../utils/axios";
 import React, { useState, useEffect } from "react";
-
-const Drivers=()=> {
-
-
+import CreateDriver from "@/components/Admin/Driver/CreateDriver";
+const Drivers = () => {
   const [driverListdata, setDriverListdata] = useState();
 
   const [trigger, setTrigger] = useState();
@@ -17,26 +15,26 @@ const Drivers=()=> {
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/driver/list/`
+        `/api/driver/list/`
       );
       setDriverListdata(response.data);
     }
     fetchData();
   }, [trigger]);
 
-
-
-
-
-
-
   return (
     <>
       <Head>
         <title>Drivers - Admin | Moover</title>
       </Head>
-      <AdminSidebar>  <DriverList driverListdata={driverListdata} setTrigger={setTrigger} /></AdminSidebar>
+      <AdminSidebar>
+    
+        <div className="flex flex-col gap-12">
+        <DriverList driverListdata={driverListdata} setTrigger={setTrigger} />
+        <CreateDriver setTrigger={setTrigger}/>
+        </div>
+      </AdminSidebar>
     </>
   );
-}
+};
 export default withAuthAdmin(Drivers);

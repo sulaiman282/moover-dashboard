@@ -14,7 +14,7 @@ const Vendors = () => {
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/vender/list/`
+        `/api/vender/list/`
       );
       setVendorListdata(response.data);
     }
