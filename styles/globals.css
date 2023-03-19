@@ -130,3 +130,6 @@ input[type=number]::-webkit-inner-spin-button,
 }
 
 /* raining effect */
+.ReactModal__Overlay{
+  background-color: #0000007e !important;
+}

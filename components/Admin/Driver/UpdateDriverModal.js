@@ -4,7 +4,7 @@ import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
 export default function CreateDriver({ setTrigger }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
 
 
@@ -104,16 +104,11 @@ export default function CreateDriver({ setTrigger }) {
 
   return (
     <div className="">
-      <div className="flex justify-between items-center gap-4 border-b cursor-pointer" onClick={()=>{setShow(!show)}}>
+     
         <h2 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider w-fit">
-          Register a driver
+          Update driver
         </h2>
-        {
-          !show ? <i className="fa-solid fa-caret-down"></i> :<i className="fa-solid fa-caret-right"></i>
-        }
-      </div>
-{show && (
-
+   
 <Formik
 enableReinitialize
 initialValues={{
@@ -191,7 +186,7 @@ onSubmit={(values, { resetForm }) => {
 }) => (
   <form
     onSubmit={handleSubmit}
-    className=" flex flex-col gap-4  bg-white  p-5 lg:p-10 rounded"
+    className=" flex flex-col gap-4  bg-white border-2 p-5 lg:p-10 rounded"
   >
     <div className="lg:flex-row flex-col flex lg:items-center gap-4">
       <div className="flex flex-col lg:w-3/4 w-full">
@@ -502,7 +497,7 @@ onSubmit={(values, { resetForm }) => {
   </form>
 )}
 </Formik>
-)}
+
     
     </div>
   );

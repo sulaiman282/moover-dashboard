@@ -4,6 +4,7 @@ import Head from "next/head";
 import VendorList from "../../components/Admin/Vendor/VendorList";
 import axios from "../../utils/axios";
 import React, { useState, useEffect } from "react";
+import CreateVendor from "../../components/Admin/Vendor/CreateVendor"
 const Vendors = () => {
   const [vendorListdata, setVendorListdata] = useState();
 
@@ -27,7 +28,12 @@ const Vendors = () => {
         <title>Vendor - Admin | Moover</title>
       </Head>
       <AdminSidebar>
-        <VendorList vendorListdata={vendorListdata} setTrigger={setTrigger} />
+
+      <div className="flex flex-col gap-12">
+      <VendorList vendorListdata={vendorListdata} setTrigger={setTrigger} />
+        <CreateVendor setTrigger={setTrigger}/>
+        </div>
+    
       </AdminSidebar>
     </>
   );

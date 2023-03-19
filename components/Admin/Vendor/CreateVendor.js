@@ -8,7 +8,7 @@ export default function CreateDriver({ setTrigger }) {
 
 
 
-  const [vendorList, setVendorList] = useState();
+
 
   const [countryList, setCountryList] = useState();
   const [stateList, setStateList] = useState();
@@ -17,16 +17,13 @@ export default function CreateDriver({ setTrigger }) {
 
   //get vendors list ad countries on load
   useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get(`/api/vender/list/`);
-      setVendorList(response.data);
-    }
+
     async function CountryData() {
       const response = await axios.get(`api/address/countries/`);
       setCountryList(response.data);
     }
     CountryData();
-    fetchData();
+
   }, []);
 
   //get state by id
@@ -60,9 +57,10 @@ export default function CreateDriver({ setTrigger }) {
   }
 
   //register api
-  async function RegisterDriver(values, resetForm) {
+  async function CreateVendor(values, resetForm) {
+    console.log(values);
     const formData = new FormData();
-    formData.append("vender_id", values.vender_id);
+    formData.append("trade_license_number", values.trade_license_number);
     formData.append("type", values.type);
     formData.append("first_name", values.first_name);
     formData.append("last_name", values.last_name);
@@ -73,13 +71,11 @@ export default function CreateDriver({ setTrigger }) {
     formData.append("city_id", values.city_id);
     formData.append("area_id", values.area_id);
     formData.append("street", values.street);
-    formData.append("profile_pic", values.profile_pic);
-    formData.append("driving_license", values.driving_license);
-    formData.append("identification", values.identification);
+
 
     const loading = toast.loading("Please wait a moment.");
     try {
-      const res = await axios.post(`/api/driver/register/`, formData);
+      const res = await axios.post(`/api/vender/register/`, formData);
       setIsLoading(false);
       toast.dismiss(loading);
       const { status, data } = res;
@@ -106,7 +102,7 @@ export default function CreateDriver({ setTrigger }) {
     <div className="">
       <div className="flex justify-between items-center gap-4 border-b cursor-pointer" onClick={()=>{setShow(!show)}}>
         <h2 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider w-fit">
-          Register a driver
+          Register a vendor
         </h2>
         {
           !show ? <i className="fa-solid fa-caret-down"></i> :<i className="fa-solid fa-caret-right"></i>
@@ -117,7 +113,6 @@ export default function CreateDriver({ setTrigger }) {
 <Formik
 enableReinitialize
 initialValues={{
-  vender_id: "",
   type: "",
   first_name: "",
   last_name: "",
@@ -128,19 +123,18 @@ initialValues={{
   city_id: "",
   area_id: "",
   street: "",
+  trade_license_number:""
 
-  profile_pic: [],
-  driving_license: [],
-  identification: [],
 }}
 validate={(values) => {
   const errors = {};
 
-  if (!values.vender_id) {
-    errors.vender_id = "Please select vender.";
-  }
+ 
   if (!values.type) {
     errors.type = "Please select type.";
+  }
+  if (!values.trade_license_number) {
+    errors.trade_license_number = "Please enter trade licence number.";
   }
   if (!values.first_name) {
     errors.first_name = "Please enter first name.";
@@ -173,7 +167,7 @@ validate={(values) => {
   return errors;
 }}
 onSubmit={(values, { resetForm }) => {
-  RegisterDriver(values, resetForm);
+  CreateVendor(values, resetForm);
 
   console.log("Form values", values);
 }}
@@ -193,49 +187,7 @@ onSubmit={(values, { resetForm }) => {
     onSubmit={handleSubmit}
     className=" flex flex-col gap-4  bg-white  p-5 lg:p-10 rounded"
   >
-    <div className="lg:flex-row flex-col flex lg:items-center gap-4">
-      <div className="flex flex-col lg:w-3/4 w-full">
-        <small className="mb-1 ml-1">Select Vendor</small>
-
-        <select
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.vender_id}
-          name="vender_id"
-          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-        >
-          <option value="">Select vendor</option>
-          {vendorList &&
-            vendorList?.map((data, index) => (
-              <option value={data?.id} key={index}>
-                {data?.user?.name}
-              </option>
-            ))}
-        </select>
-        <small className="p-2 text-red-700">
-          {errors.vender_id && touched.vender_id && errors.vender_id}
-        </small>
-      </div>
-      <div className="flex flex-col lg:w-1/4 w-full ">
-        <small className="mb-1 ml-1">Type</small>
-
-        <select
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.type}
-          name="type"
-          className="border-0 mt-1 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-        >
-          <option value="">Select type</option>
-          <option value="home">Home</option>
-          <option value="office">Office</option>
-        </select>
-
-        <small className="p-2 text-red-700">
-          {errors.type && touched.type && errors.type}
-        </small>
-      </div>
-    </div>
+    
 
     <div className="flex lg:justify-between lg:flex-row flex-col gap-4">
       <div className="relative w-full ">
@@ -412,90 +364,67 @@ onSubmit={(values, { resetForm }) => {
       </div>
     </div>
 
-    <div className="relative w-full">
-      <small className="mb-1 ml-1">Street Address</small>
-      <input
-        type="text"
-        name="street"
-        onChange={handleChange}
-        autoComplete="off"
-        onBlur={handleBlur}
-        value={values.street}
-        className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-        placeholder="Enter street address"
-      />
-      <small className="p-2 text-red-700">
-        {errors.street && touched.street && errors.street}
-      </small>
-    </div>
+    <div className="lg:flex-row flex-col flex gap-4 ">
 
-    <div className="flex lg:flex-row flex-col gap-4">
-      <div className="relative w-full ">
-        <small className="mb-1 ml-1">Profile Picture</small>
-        <input
-          type="file"
-          accept="image/*"
-          name="profile_pic"
-          onChange={(e) => {
-            values.profile_pic = e.target.files[0];
-          }}
-          autoComplete="off"
-          onBlur={handleBlur}
-          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-          placeholder="Username"
-        />
-        <small className="p-2 text-red-700">
-          {errors.profile_pic &&
-            touched.profile_pic &&
-            errors.profile_pic}
-        </small>
-      </div>
+<div className="relative w-full   ">
+  <small className="mb-1 ml-1">Street Address</small>
+  <input
+    type="text"
+    name="street"
+    onChange={handleChange}
+    autoComplete="off"
+    onBlur={handleBlur}
+    value={values.street}
+    className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+    placeholder="Enter street address"
+  />
+  <small className="p-2 text-red-700">
+    {errors.street && touched.street && errors.street}
+  </small>
+</div>
+<div className="relative w-full  lg:w-1/2 ">
+  <small className="mb-1 ml-1">Trade Licence Number</small>
+  <input
+    type="text"
+    name="trade_license_number"
+    onChange={handleChange}
+    autoComplete="off"
+    onBlur={handleBlur}
+    value={values.trade_license_number}
+    className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+    placeholder="Enter trade license number address"
+  />
+  <small className="p-2 text-red-700">
+    {errors.trade_license_number && touched.trade_license_number && errors.trade_license_number}
+  </small>
+</div>
 
-      <div className="relative w-full ">
-        <small className="mb-1 ml-1">Driving Licence</small>
-        <input
-          type="file"
-          accept=".pdf"
-          name="driving_license"
-          onChange={(e) => {
-            values.driving_license = e.target.files[0];
-          }}
-          autoComplete="off"
-          onBlur={handleBlur}
-          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-          placeholder="Username"
-        />
-        <small className="p-2 text-red-700">
-          {errors.username && touched.username && errors.username}
-        </small>
-      </div>
+  <div className="flex flex-col  w-full lg:w-1/2 ">
+    <small className="mb-1 ml-1">Type</small>
 
-      <div className="relative w-full ">
-        <small className="mb-1 ml-1">Identification</small>
-        <input
-          type="file"
-          accept=".pdf"
-          name="identification"
-          onChange={(e) => {
-            values.identification = e.target.files[0];
-          }}
-          autoComplete="off"
-          onBlur={handleBlur}
-          className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
-          placeholder="identification"
-        />
-        <small className="p-2 text-red-700">
-          {errors.identification &&
-            touched.identification &&
-            errors.identification}
-        </small>
-      </div>
-    </div>
+    <select
+      onChange={handleChange}
+      onBlur={handleBlur}
+      value={values.type}
+      name="type"
+      className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
+    >
+      <option value="">Select type</option>
+      <option value="home">Home</option>
+      <option value="office">Office</option>
+    </select>
+
+    <small className="p-2 text-red-700">
+      {errors.type && touched.type && errors.type}
+    </small>
+  </div>
+</div>
+ 
 
     <button
       type="submit"
       disabled={isLoading}
-      className="py-2 rounded  mt-10 text-white shadow w-32 justify-center  bg-gray-700 hover:bg-gray-900"
+      className="py-2 rounded   text-white shadow w-32 justify-center  bg-gray-700 hover:bg-gray-900"
     >
       Add Driver
     </button>

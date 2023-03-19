@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
-
+import Modal from "react-modal";
+import UpdateModal from "./UpdateVendor";
 export default function VendorList({ vendorListdata, setTrigger }) {
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState();
+  const [modalOpen2, setModalOpen2] = useState(false);
+  console.log("modal data",modalData)
+  
+  function openModal() {
+    setModalOpen(true);
+  }
 
+  function closeModal() {
+    setModalOpen(false);
+  }
+  function openModal2() {
+    setModalOpen2(true);
+  }
+
+  function closeModal2() {
+    setModalOpen2(false);
+  }
     async function UpdateStatus(id) {
         console.log("i am inside delete", id);
         const response = await axios.put(
@@ -29,6 +48,7 @@ export default function VendorList({ vendorListdata, setTrigger }) {
 
 
   return (
+ <>
     <div>
       <h1 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider">
         Vendors List
@@ -59,15 +79,21 @@ export default function VendorList({ vendorListdata, setTrigger }) {
                 </td>
              
                 <td className="border  ">
-                  {" "}
+                  
                   <div className="flex flex-row  justify-between gap-2 px-2">
-                    <i className="fa-solid fa-eye cursor-pointer hover:text-red-700"></i>{" "}
-                    <i className="fa-solid fa-pen-to-square cursor-pointer hover:text-red-700"></i>{" "}
+                    <i className="fa-solid fa-eye cursor-pointer hover:text-red-700"    onClick={() => {
+                          setModalData(item);
+                          setModalOpen(true);
+                        }}></i>
+                    <i className="fa-solid fa-pen-to-square cursor-pointer hover:text-red-700" onClick={() => {
+                          setModalData(item);
+                          setModalOpen2(true);
+                        }}></i>
                     <i
                       className="fa-solid fa-trash cursor-pointer hover:text-red-700"
                       onClick={(e) => DeleteVendor(item?.id)}
                     ></i>
-                  </div>{" "}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -75,5 +101,83 @@ export default function VendorList({ vendorListdata, setTrigger }) {
         </table>
       </div>
     </div>
+    <Modal
+    isOpen={modalOpen}
+    onRequestClose={closeModal}
+    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 border max-w-[90vw] max-h-[90vh] p-10 lg:p-16 overflow-y-auto"
+    contentLabel="Example Modal"
+  >
+    <i
+      class="fa-solid fa-xmark hover:text-red-700 absolute top-0 right-0 m-5 text-2xl cursor-pointer"
+      onClick={() => {
+        closeModal();
+      }}
+    ></i>
+    <div className="flex lg:flex-row flex-col gap-16">
+      <div className=" text-sm md:text-base tracking-wide">
+        <h1 className="border-b text-lg lg:text-xl font-bold w-fit border-black mb-3 ">
+          Vendor Details:
+        </h1>
+        <p>
+          <span className="font-bold">Name:</span>&nbsp;
+          {modalData?.user?.name}
+        </p>
+        <p>
+          <span className="font-bold">User Name:</span>&nbsp;
+          {modalData?.user?.username}
+        </p>
+        <p>
+          <span className="font-bold">Phone Number:</span>&nbsp;
+          {modalData?.user?.phone_number}
+        </p>
+        <p>
+          <span className="font-bold">Email:</span>&nbsp;
+          {modalData?.user?.email}
+        </p>
+        <p>
+          <span className="font-bold">Trade Licence Number:</span>&nbsp;
+          {modalData?.trade_license_number}
+        </p>
+   
+
+        <p>
+          <span className="font-bold">Street:</span>&nbsp;
+          {modalData?.address?.street}
+        </p>
+        <p>
+          <span className="font-bold">Area:</span>&nbsp;
+          {modalData?.address?.area?.name}
+        </p>
+        <p>
+          <span className="font-bold">City:</span>&nbsp;
+          {modalData?.address?.city?.name}
+        </p>
+        <p>
+          <span className="font-bold">State:</span>&nbsp;
+          {modalData?.address?.state?.name}
+        </p>
+        <p>
+          <span className="font-bold">Country:</span>&nbsp;
+          {modalData?.address?.country?.name}
+        </p>
+      </div>
+    
+    </div>
+  </Modal>
+  <Modal
+        isOpen={modalOpen2}
+        onRequestClose={closeModal2}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 border max-w-[90vw] w-full max-h-[90vh] p-5 lg:p-16 overflow-y-auto"
+        contentLabel="Example Modal"
+      >
+        <i
+          class="fa-solid fa-xmark hover:text-red-700 absolute top-0 right-0 lg:m-5 m-3 text-2xl cursor-pointer"
+          onClick={() => {
+            closeModal2();
+          }}
+        ></i>
+        <UpdateModal modalData={modalData} setTrigger={setTrigger} setModalOpen2={setModalOpen2}/>
+      </Modal>
+ </>
   );
 }
