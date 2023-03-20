@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import Modal from "react-modal";
 import UpdateModal from "./UpdateDriverModal";
+import CreateDriver from "./CreateDriver";
 export default function VendorList({ driverListdata, setTrigger }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState();
 
   const [modalOpen2, setModalOpen2] = useState(false);
+  const [modalOpen3, setModalOpen3] = useState(false);
+
+  const [pageData, setPagedata] = useState(10);
+  const [count, setCount] = useState(1);
+
   console.log("modal data", modalData);
 
   function openModal() {
@@ -24,7 +30,26 @@ export default function VendorList({ driverListdata, setTrigger }) {
   function closeModal2() {
     setModalOpen2(false);
   }
+  function openModal3() {
+    setModalOpen3(true);
+  }
 
+  function closeModal3() {
+    setModalOpen3(false);
+  }
+
+  //filter driver
+  const [search, setSearch] = useState("");
+
+  const filteredUsers = driverListdata?.filter(
+    (data) =>
+      data?.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      data.user?.email?.toLowerCase().includes(search.toLowerCase()) ||
+      data.vender?.name?.toLowerCase().includes(search.toLowerCase())
+  );
+  console.log("filtered Data", filteredUsers);
+
+  //update status
   async function UpdateStatus(id) {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_URL}/api/driver/${id}/status/`
@@ -32,21 +57,40 @@ export default function VendorList({ driverListdata, setTrigger }) {
     console.log(response);
     setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
   }
-
+  //delete driver
   async function DeleteVendor(id) {
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_API_URL}/api/driver/${id}/delete/`
     );
     console.log(response);
+    setPagedata(10);setCount(1);
     setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
   }
 
   return (
     <>
       <div>
-        <h1 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider">
-          Driver List
+        <h1 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider flex justify-between items-center">
+          <span> Drivers List </span>{" "}
+          <span
+            className="text-sm px-3 py-2 rounded-full border-primary border cursor-pointer hover:bg-primary duration-300 hover:text-white"
+            onClick={() => openModal3()}
+          >
+            Register New
+          </span>
         </h1>
+
+        <div>
+          <input
+            className="mb-3  w-full"
+            type="text"
+            placeholder="Search with vender or driver name or with driver email."
+            onChange={(e) => {
+              setSearch(e.target.value);setPagedata(10);setCount(1)
+            }}
+          />
+        </div>
+      
         <div className="lg:text-base text-sm  w-full  overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100 ">
           <table className=" table-auto  text-center min-w-[600px] w-full ">
             <thead className="border   bg-gray-700 text-white">
@@ -60,8 +104,10 @@ export default function VendorList({ driverListdata, setTrigger }) {
               </tr>
             </thead>
             <tbody className="border">
-              {driverListdata?.map((item, index) => (
-                <tr
+              { filteredUsers?.map((item, index) => 
+            
+              pageData >= index && pageData<=(index+10)  &&(
+<tr
                   key={index}
                   className={`${index % 2 == 0 ? "bg-white" : ""}`}
                 >
@@ -106,10 +152,28 @@ export default function VendorList({ driverListdata, setTrigger }) {
                     </div>
                   </td>
                 </tr>
-              ))}
+
+              )
+            
+   
+           
+             
+              )}
             </tbody>
           </table>
         </div>
+        <p className=" text-xs my-2">Total Count:{filteredUsers?.length}</p>
+        <div className="mt-5 flex gap-4 items-center">
+          {pageData>10 && (
+            <button type="text" className="text-xs border border-primary hover:bg-primary hover:text-white" onClick={()=>{setPagedata(pageData-10); setCount(count-1)}}>Previous</button>
+          )}
+            
+            <button type="text" className="text-xs" disabled>{count}</button>
+            {pageData<filteredUsers?.length && (
+         <button type="text" className="text-xs border border-primary hover:bg-primary hover:text-white px-6" onClick={()=>{setPagedata(pageData+10); setCount(count+1)}}>Next</button>
+          )}
+           
+          </div>
       </div>
 
       <Modal
@@ -124,10 +188,15 @@ export default function VendorList({ driverListdata, setTrigger }) {
             closeModal();
           }}
         ></i>
-        <div className="flex justify-center">
-        <img src={process.env.NEXT_PUBLIC_API_URL+modalData?.profile_pic} className="w-40 h-40 p-5 lg:w-64 lg:h-64 object-contain"/>
-       
-        </div>
+        {modalData?.profile_pic && (
+          <div className="flex justify-center">
+            <img
+              src={process.env.NEXT_PUBLIC_API_URL + modalData?.profile_pic}
+              className="w-40 h-40 p-5 lg:w-64 lg:h-64 object-contain"
+            />
+          </div>
+        )}
+
         <div className="flex lg:flex-row flex-col gap-16">
           <div className=" text-sm md:text-base tracking-wide">
             <h1 className="border-b text-lg lg:text-xl font-bold w-fit border-black mb-3 ">
@@ -152,7 +221,12 @@ export default function VendorList({ driverListdata, setTrigger }) {
             {modalData?.driving_license && (
               <p>
                 <span className="font-bold">Driving Licence:</span>&nbsp;{" "}
-                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.driving_license}>
+                <a
+                  target="_blank"
+                  href={
+                    process.env.NEXT_PUBLIC_API_URL + modalData?.driving_license
+                  }
+                >
                   View Now
                 </a>
               </p>
@@ -161,7 +235,12 @@ export default function VendorList({ driverListdata, setTrigger }) {
             {modalData?.identification && (
               <p>
                 <span className="font-bold">Identification:</span>&nbsp;{" "}
-                <a target="_blank" href={process.env.NEXT_PUBLIC_API_URL+modalData?.identification}>
+                <a
+                  target="_blank"
+                  href={
+                    process.env.NEXT_PUBLIC_API_URL + modalData?.identification
+                  }
+                >
                   View Now
                 </a>
               </p>
@@ -225,6 +304,20 @@ export default function VendorList({ driverListdata, setTrigger }) {
           setTrigger={setTrigger}
           setModalOpen2={setModalOpen2}
         />
+      </Modal>
+      <Modal
+        isOpen={modalOpen3}
+        onRequestClose={closeModal3}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 border max-w-[90vw] w-full max-h-[90vh] p-5 lg:p-16 overflow-y-auto"
+        contentLabel="Example Modal"
+      >
+        <i
+          class="fa-solid fa-xmark hover:text-red-700 absolute top-0 right-0 lg:m-5 m-3 text-2xl cursor-pointer"
+          onClick={() => {
+            closeModal3();
+          }}
+        ></i>
+        <CreateDriver setTrigger={setTrigger} closeModal3={closeModal3} />
       </Modal>
     </>
   );

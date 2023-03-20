@@ -2,9 +2,9 @@ import { Formik } from "formik";
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
-export default function CreateDriver({ setTrigger }) {
+export default function CreateDriver({ setTrigger,closeModal3 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
 
 
@@ -86,6 +86,7 @@ export default function CreateDriver({ setTrigger }) {
       if (status === 201) {
         toast.success("Driver created Successfully.");
         resetForm();
+        closeModal3();
         setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
       }
       if (status === 204) {
@@ -103,15 +104,13 @@ export default function CreateDriver({ setTrigger }) {
 
   return (
     <div className="">
-      <div className="flex justify-between items-center gap-4 border-b cursor-pointer" onClick={()=>{setShow(!show)}}>
+      <div className="flex justify-between items-center gap-4 border-b cursor-pointer">
         <h2 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider w-fit">
           Register a vendor
         </h2>
-        {
-          !show ? <i className="fa-solid fa-caret-down"></i> :<i className="fa-solid fa-caret-right"></i>
-        }
+      
       </div>
-{show && (
+
 
 <Formik
 enableReinitialize
@@ -282,7 +281,7 @@ onSubmit={(values, { resetForm }) => {
           <option value="">Select country</option>
           {countryList &&
             countryList?.map((data, index) => (
-              <option value={data?.id} key={index}>
+              <option value={data?.id} className="capitalize" key={index}>
                 {data?.name}
               </option>
             ))}
@@ -309,7 +308,7 @@ onSubmit={(values, { resetForm }) => {
           <option value="">Select state</option>
           {stateList &&
             stateList?.map((data, index) => (
-              <option value={data?.id} key={index}>
+              <option value={data?.id} className="capitalize" key={index}>
                 {data?.name}
               </option>
             ))}
@@ -335,7 +334,7 @@ onSubmit={(values, { resetForm }) => {
           <option value="">Select city</option>
           {cityList &&
             cityList?.map((data, index) => (
-              <option value={data?.id} key={index}>
+              <option value={data?.id} className="capitalize" key={index}>
                 {data?.name}
               </option>
             ))}
@@ -359,7 +358,7 @@ onSubmit={(values, { resetForm }) => {
           <option value="">Select area</option>
           {areaList &&
             areaList?.map((data, index) => (
-              <option value={data?.id} key={index}>
+              <option value={data?.id} className="capitalize" key={index}>
                 {data?.name}
               </option>
             ))}
@@ -495,12 +494,12 @@ onSubmit={(values, { resetForm }) => {
       disabled={isLoading}
       className="py-2 rounded   text-white shadow w-32 justify-center  bg-gray-700 hover:bg-gray-900"
     >
-      Add Driver
+      Add Vender
     </button>
   </form>
 )}
 </Formik>
-)}
+
     
     </div>
   );

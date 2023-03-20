@@ -29,10 +29,10 @@ const Vendors = () => {
       </Head>
       <AdminSidebar>
 
-      <div className="flex flex-col gap-12">
+     
       <VendorList vendorListdata={vendorListdata} setTrigger={setTrigger} />
-        <CreateVendor setTrigger={setTrigger}/>
-        </div>
+       
+   
     
       </AdminSidebar>
     </>

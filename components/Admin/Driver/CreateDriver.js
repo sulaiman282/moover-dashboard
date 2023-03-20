@@ -2,9 +2,9 @@ import { Formik } from "formik";
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
-export default function CreateDriver({ setTrigger }) {
+export default function CreateDriver({ setTrigger,closeModal3 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
 
 
@@ -87,6 +87,7 @@ export default function CreateDriver({ setTrigger }) {
       if (status === 201) {
         toast.success("Driver created Successfully.");
         resetForm();
+        closeModal3();
         setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
       }
       if (status === 204) {
@@ -108,11 +109,9 @@ export default function CreateDriver({ setTrigger }) {
         <h2 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider w-fit">
           Register a driver
         </h2>
-        {
-          !show ? <i className="fa-solid fa-caret-down"></i> :<i className="fa-solid fa-caret-right"></i>
-        }
+      
       </div>
-{show && (
+
 
 <Formik
 enableReinitialize
@@ -502,7 +501,7 @@ onSubmit={(values, { resetForm }) => {
   </form>
 )}
 </Formik>
-)}
+
     
     </div>
   );

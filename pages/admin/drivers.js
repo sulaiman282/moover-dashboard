@@ -29,10 +29,8 @@ const Drivers = () => {
       </Head>
       <AdminSidebar>
     
-        <div className="flex flex-col gap-12">
         <DriverList driverListdata={driverListdata} setTrigger={setTrigger} />
-        <CreateDriver setTrigger={setTrigger}/>
-        </div>
+      
       </AdminSidebar>
     </>
   );
