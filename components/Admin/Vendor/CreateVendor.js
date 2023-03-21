@@ -79,9 +79,7 @@ export default function CreateDriver({ setTrigger, closeModal3 }) {
       const { status, data } = res;
       console.log("submit data ", res);
 
-      if(data?.message?.length>0){
-        toast.error(data?.message)
-      }
+    
       if (status === 201) {
         toast.success("Driver created Successfully.");
         resetForm();
@@ -90,6 +88,11 @@ export default function CreateDriver({ setTrigger, closeModal3 }) {
       }
       if (status === 204) {
         toast.success("Email or Phone number already exists.");
+      }
+      else {
+        if(data?.message?.length>0){
+          toast.error(data?.message)
+        }
       }
     } catch (error) {
       setIsLoading(false);

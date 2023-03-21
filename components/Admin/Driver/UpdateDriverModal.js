@@ -126,6 +126,11 @@ export default function CreateDriver({ setTrigger, modalData, setModalOpen2 }) {
       if (status === 204) {
         toast.success("Email or Phone number already exists.");
       }
+      else {
+        if(data?.message?.length>0){
+          toast.error(data?.message)
+        }
+      }
     } catch (error) {
       setIsLoading(false);
 
