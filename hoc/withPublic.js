@@ -21,7 +21,7 @@ const withPublic = (WrappedComponent) => {
         // return null;
       }
       else if ( Token && UserType=="vendor" ) {
-        router.push('/vendor/drivers');
+        router.push('/vender/drivers');
         // return null;
       }
 

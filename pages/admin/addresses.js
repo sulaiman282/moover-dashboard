@@ -2,13 +2,14 @@ import React from "react";
 import AdminSidebar from "../../components/Layout/AdminSidebar";
 import withAuthAdmin from "../../hoc/withAuthAdmin";
 import Head from "next/head";
+import AddressList from "../../components/Admin/Addresses/AddressList"
 const Addresses=()=> {
   return (
     <>
       <Head>
-        <title> - Addresses | Moover</title>
+        <title>Addresses -Admin | Moover</title>
       </Head>
-      <AdminSidebar>address</AdminSidebar>
+      <AdminSidebar><AddressList/></AdminSidebar>
     </>
   );
 }

@@ -52,7 +52,7 @@ export default function VendorList({ driverListdata, setTrigger }) {
   //update status
   async function UpdateStatus(id) {
     const response = await axios.put(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/driver/${id}/status/`
+      `/api/driver/${id}/status/`
     );
     console.log(response);
     setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
@@ -60,7 +60,7 @@ export default function VendorList({ driverListdata, setTrigger }) {
   //delete driver
   async function DeleteVendor(id) {
     const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/driver/${id}/delete/`
+      `/api/driver/${id}/delete/`
     );
     console.log(response);
     setPagedata(10);setCount(1);

@@ -53,7 +53,7 @@ function Index() {
             path: "/",
             maxAge: 60 * 60 * 24 * 7, // 1 week
           });
-          router.push("/vendor/drivers");
+          router.push("/vender/drivers");
         }
       }
     } catch (error) {

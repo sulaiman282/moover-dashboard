@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import Modal from "react-modal";
-import UpdateModal from "./UpdateVendor";
-import CreateVendor from "./CreateVendor";
-
-export default function VendorList({ vendorListdata, setTrigger }) {
+import UpdateModal from "./UpdateDriverModal";
+import CreateDriver from "./CreateDriver";
+export default function VendorList({ driverListdata, setTrigger }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState();
+
   const [modalOpen2, setModalOpen2] = useState(false);
   const [modalOpen3, setModalOpen3] = useState(false);
+
   const [pageData, setPagedata] = useState(10);
   const [count, setCount] = useState(1);
+
   console.log("modal data", modalData);
 
   function openModal() {
@@ -20,6 +22,7 @@ export default function VendorList({ vendorListdata, setTrigger }) {
   function closeModal() {
     setModalOpen(false);
   }
+
   function openModal2() {
     setModalOpen2(true);
   }
@@ -35,44 +38,40 @@ export default function VendorList({ vendorListdata, setTrigger }) {
     setModalOpen3(false);
   }
 
-  //filter
+  //filter driver
   const [search, setSearch] = useState("");
 
-  const filteredUsers = vendorListdata?.filter(
+  const filteredUsers = driverListdata?.filter(
     (data) =>
       data?.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
       data.user?.email?.toLowerCase().includes(search.toLowerCase()) ||
-      data.user?.phone_number?.toLowerCase().includes(search.toLowerCase())
+      data.vender?.name?.toLowerCase().includes(search.toLowerCase())
   );
   console.log("filtered Data", filteredUsers);
 
-  //vender status update
+  //update status
   async function UpdateStatus(id) {
-    console.log("i am inside delete", id);
     const response = await axios.put(
-      `/api/vender/${id}/status/`
+      `/api/driver/${id}/status/`
     );
     console.log(response);
     setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
   }
-
-  //delete vender
+  //delete driver
   async function DeleteVendor(id) {
-    console.log("i am inside delete", id);
     const response = await axios.delete(
-      `/api/vender/${id}/delete/`
+      `/api/driver/${id}/delete/`
     );
     console.log(response);
     setPagedata(10);setCount(1);
     setTrigger(Math.floor(Math.random() * (1000 - 1 + 1)) + 1);
   }
 
- 
   return (
     <>
       <div>
         <h1 className="mb-3 text-base md:text-lg lg:text-xl font-bold tracking-wider flex justify-between items-center">
-          <span> Venders List </span>{" "}
+          <span> Drivers List </span>{" "}
           <span
             className="text-sm px-3 py-2 rounded-full border-primary border cursor-pointer hover:bg-primary duration-300 hover:text-white"
             onClick={() => openModal3()}
@@ -80,22 +79,24 @@ export default function VendorList({ vendorListdata, setTrigger }) {
             Register New
           </span>
         </h1>
+
         <div>
           <input
             className="mb-3  w-full"
             type="text"
-            placeholder="Search with vender name, email or phone number."
+            placeholder="Search with vender or driver name or with driver email."
             onChange={(e) => {
-              setSearch(e.target.value);setPagedata(10);setCount(1);
+              setSearch(e.target.value);setPagedata(10);setCount(1)
             }}
           />
         </div>
+      
         <div className="lg:text-base text-sm  w-full  overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100 ">
           <table className=" table-auto  text-center min-w-[600px] w-full ">
             <thead className="border   bg-gray-700 text-white">
               <tr>
-                <th className="border py-2  w-3/12">Name</th>
-                <th className="border py-2   w-3/12">Email</th>
+                <th className="border py-2  w-3/12">Driver Name</th>
+                <th className="border py-2   w-3/12">Vendor Name</th>
                 <th className="border py-2   w-3/12">Phone Number</th>
                 <th className="border py-2   w-1/12 lg:w-2/12">Status</th>
 
@@ -103,13 +104,15 @@ export default function VendorList({ vendorListdata, setTrigger }) {
               </tr>
             </thead>
             <tbody className="border">
-              {filteredUsers?.map((item, index) =>  pageData >= index && pageData<=(index+10)  &&(
-                <tr
+              { filteredUsers?.map((item, index) => 
+            
+              pageData >= index && pageData<=(index+10)  &&(
+<tr
                   key={index}
                   className={`${index % 2 == 0 ? "bg-white" : ""}`}
                 >
                   <td className="border break-all	">{item?.user?.name}</td>
-                  <td className="border break-all">{item?.user?.email}</td>
+                  <td className="border break-all">{item?.vender?.name}</td>
                   <td className="border break-all">
                     {item?.user?.phone_number}
                   </td>
@@ -120,14 +123,14 @@ export default function VendorList({ vendorListdata, setTrigger }) {
                         value=""
                         className="sr-only peer"
                         onChange={() => UpdateStatus(item?.id)}
-                        defaultChecked={item?.vender_status == true}
+                        defaultChecked={item?.driver_status == true}
                       />
                       <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-primary dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-gray-900"></div>
                     </label>
                   </td>
 
                   <td className="border  ">
-                    <div className="flex flex-row  justify-between gap-2 px-2">
+                    <div className="flex flex-row  justify-center gap-4 px-2">
                       <i
                         className="fa-solid fa-eye cursor-pointer hover:text-red-700"
                         onClick={() => {
@@ -142,14 +145,17 @@ export default function VendorList({ vendorListdata, setTrigger }) {
                           setModalOpen2(true);
                         }}
                       ></i>
-                      <i
-                        className="fa-solid fa-trash cursor-pointer hover:text-red-700"
-                        onClick={(e) => DeleteVendor(item?.id)}
-                      ></i>
+                    
                     </div>
                   </td>
                 </tr>
-              ))}
+
+              )
+            
+   
+           
+             
+              )}
             </tbody>
           </table>
         </div>
@@ -166,10 +172,11 @@ export default function VendorList({ vendorListdata, setTrigger }) {
            
           </div>
       </div>
+
       <Modal
         isOpen={modalOpen}
         onRequestClose={closeModal}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 border max-w-[90vw] max-h-[90vh] p-10 lg:p-16 overflow-y-auto capitalize"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 border max-w-[90vw] max-h-[90vh] p-10 lg:p-16 overflow-y-auto"
         contentLabel="Example Modal"
       >
         <i
@@ -178,10 +185,19 @@ export default function VendorList({ vendorListdata, setTrigger }) {
             closeModal();
           }}
         ></i>
-        <div className="flex lg:flex-row flex-col gap-16">
+        {modalData?.profile_pic && (
+          <div className="flex justify-center">
+            <img
+              src={process.env.NEXT_PUBLIC_API_URL + modalData?.profile_pic}
+              className="w-40 h-40 p-5 lg:w-64 lg:h-64 object-contain"
+            />
+          </div>
+        )}
+
+      
           <div className=" text-sm md:text-base tracking-wide">
             <h1 className="border-b text-lg lg:text-xl font-bold w-fit border-black mb-3 ">
-              Vendor Details:
+              Driver Details:
             </h1>
             <p>
               <span className="font-bold">Name:</span>&nbsp;
@@ -199,45 +215,27 @@ export default function VendorList({ vendorListdata, setTrigger }) {
               <span className="font-bold">Email:</span>&nbsp;
               {modalData?.user?.email}
             </p>
-            <p>
-              <span className="font-bold">Trade Licence Number:</span>&nbsp;
-              {modalData?.trade_license_number}
-            </p>
-            {modalData?.contract_file && (
+            {modalData?.driving_license && (
               <p>
-                <span className="font-bold">Contract File:</span>&nbsp;{" "}
+                <span className="font-bold">Driving Licence:</span>&nbsp;{" "}
                 <a
                   target="_blank"
                   href={
-                    process.env.NEXT_PUBLIC_API_URL + modalData?.contract_file
+                    process.env.NEXT_PUBLIC_API_URL + modalData?.driving_license
                   }
                 >
                   View Now
                 </a>
               </p>
             )}
-            {modalData?.trade_license_docs && (
+
+            {modalData?.identification && (
               <p>
-                <span className="font-bold">Trading Licence:</span>&nbsp;{" "}
+                <span className="font-bold">Identification:</span>&nbsp;{" "}
                 <a
                   target="_blank"
                   href={
-                    process.env.NEXT_PUBLIC_API_URL +
-                    modalData?.trade_license_docs
-                  }
-                >
-                  View Now
-                </a>
-              </p>
-            )}
-            {modalData?.vender_agreement && (
-              <p>
-                <span className="font-bold">Vender Agreement:</span>&nbsp;{" "}
-                <a
-                  target="_blank"
-                  href={
-                    process.env.NEXT_PUBLIC_API_URL +
-                    modalData?.vender_agreement
+                    process.env.NEXT_PUBLIC_API_URL + modalData?.identification
                   }
                 >
                   View Now
@@ -266,10 +264,10 @@ export default function VendorList({ vendorListdata, setTrigger }) {
               {modalData?.address?.country?.name}
             </p>
           </div>
-
        
-        </div>
+     
       </Modal>
+
       <Modal
         isOpen={modalOpen2}
         onRequestClose={closeModal2}
@@ -300,7 +298,7 @@ export default function VendorList({ vendorListdata, setTrigger }) {
             closeModal3();
           }}
         ></i>
-        <CreateVendor setTrigger={setTrigger} closeModal3={closeModal3} />
+        <CreateDriver setTrigger={setTrigger} closeModal3={closeModal3} />
       </Modal>
     </>
   );

@@ -42,28 +42,22 @@ export default function AdminMenuItems({toggleDrawer}) {
 
   return (
     <div className="flex flex-col gap-4  h-full">
-      <h3 className="font-bold lg:text-lg text-base"> Admin Options </h3>
+      <h3 className="font-bold lg:text-lg text-base"> Vender Options </h3>
       <Link
-        className={`${router?.pathname == "/admin/vendors" ? "text-primary" : ""} flex gap-2 items-center hover:text-red-700 duration-300 lg:text-lg md:text-base text-sm`}
-        href="/admin/vendors"
+        className={`${router?.pathname == "/vender/drivers" ? "text-primary" : ""} flex gap-2 items-center hover:text-red-700 duration-300 lg:text-lg md:text-base text-sm`}
+        href="/vender/drivers"
         onClick={()=>{toggleDrawer()}}
       >
-        <i class="fa-solid fa-users-gear mr-2"></i> Vendors
+        <i className="fa-solid fa-taxi mr-2"></i> Drivers
       </Link>
       <Link
-        className={`${router?.pathname == "/admin/drivers" ? "text-primary" : ""} flex gap-2 items-center hover:text-red-700 duration-300 lg:text-lg md:text-base text-sm`}
-        href="/admin/drivers"
+        className={`${router?.pathname == "/vender/myprofile" ? "text-primary" : ""} flex gap-2 items-center hover:text-red-700 duration-300 lg:text-lg md:text-base text-sm`}
+        href="/vender/myprofile"
         onClick={()=>{toggleDrawer()}}
       >
-      <i className="fa-solid fa-taxi mr-2"></i>Drivers
+     <i class="fa-solid fa-user mr-2"></i> My Profile
       </Link>
-      <Link
-        className={`${router?.pathname == "/admin/addresses" ? "text-primary" : ""} flex gap-2 items-center hover:text-red-700 duration-300 lg:text-lg md:text-base text-sm`}
-        href="/admin/addresses"
-        onClick={()=>{toggleDrawer()}}
-      >
-       <i class="fa-solid fa-map-location-dot mr-2"></i>Addresses
-      </Link>
+
 
       <button className="mt-auto border bg-primary hover:bg-primary2 duration-300 text-white font-bold md:text-lg text-base py-2" onClick={()=>{logoutFunction();toggleDrawer()}}>Logout</button>
     </div>

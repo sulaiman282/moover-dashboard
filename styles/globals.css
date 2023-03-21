@@ -133,3 +133,11 @@ input[type=number]::-webkit-inner-spin-button,
 .ReactModal__Overlay{
   background-color: #0000007e !important;
 }
+
+.PhoneInputInput{
+  height: 35px !important;
+  border: none;
+  box-shadow: 0 1px 5px 0 rgb(0 0 0 / 0.05);
+ border-radius: 2px;
+
+}

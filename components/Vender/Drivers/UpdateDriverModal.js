@@ -2,8 +2,6 @@ import { Formik } from "formik";
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 export default function CreateDriver({ setTrigger, modalData, setModalOpen2 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(true);
@@ -298,7 +296,7 @@ export default function CreateDriver({ setTrigger, modalData, setModalOpen2 }) {
               </div>
               <div className="relative w-full ">
                 <small className="mb-1 ml-1">Phone</small>
-                {/* <input
+                <input
                   type="number"
                   name="number"
                   onChange={handleChange}
@@ -307,19 +305,7 @@ export default function CreateDriver({ setTrigger, modalData, setModalOpen2 }) {
                   value={values.number}
                   className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
                   placeholder="Phone number"
-                /> */}
-
-<PhoneInput
-              
-                name="number"
-                className=""
-                value={values.number}
-                placeholder="Enter phone number"
-                onChange={(e) => {
-                  values.number = e;
-                }}
-                onBlur={handleBlur}
-              />
+                />
                 <small className="p-2 text-red-700">
                   {errors.number && touched.number && errors.number}
                 </small>

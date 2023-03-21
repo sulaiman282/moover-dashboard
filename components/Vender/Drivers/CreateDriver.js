@@ -2,8 +2,6 @@ import { Formik } from "formik";
 import React, { useState, useEffect } from "react";
 import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 export default function CreateDriver({ setTrigger,closeModal3 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(true);
@@ -170,12 +168,6 @@ validate={(values) => {
   if (!values.street) {
     errors.street = "Please enter street address.";
   }
-  if (values.driving_license?.length<1) {
-    errors.driving_license = "Please add driving licence.";
-  }
-  if (values.identification?.length<1) {
-    errors.identification = "Please add identification.";
-  }
 
   return errors;
 }}
@@ -295,7 +287,7 @@ onSubmit={(values, { resetForm }) => {
       </div>
       <div className="relative w-full ">
         <small className="mb-1 ml-1">Phone</small>
-        {/* <input
+        <input
           type="number"
           name="number"
           onChange={handleChange}
@@ -304,19 +296,7 @@ onSubmit={(values, { resetForm }) => {
           value={values.number}
           className="border-0  placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none  w-full"
           placeholder="Phone number"
-        /> */}
-
-<PhoneInput
-                defaultCountry="US"
-                name="number"
-                className=""
-                value={values.number}
-                placeholder="Enter phone number"
-                onChange={(e) => {
-                  values.number = e;
-                }}
-                onBlur={handleBlur}
-              />
+        />
         <small className="p-2 text-red-700">
           {errors.number && touched.number && errors.number}
         </small>
@@ -485,7 +465,7 @@ onSubmit={(values, { resetForm }) => {
           placeholder="Username"
         />
         <small className="p-2 text-red-700">
-          {errors.driving_license && touched.driving_license && errors.driving_license}
+          {errors.username && touched.username && errors.username}
         </small>
       </div>
 
